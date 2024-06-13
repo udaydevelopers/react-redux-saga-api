@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import { Provider } from 'react-redux';
+import store from './store/configureStore';
+import ProductList from './components/ProductList';
+import LoginForm from './components/LoginForm';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute'; 
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <Provider store={store}>
+      <div className="App">
+      <Router>
+        <ul>
+          <li><Link to='/login'>Login</Link></li>
+          <li><Link to='/products'>Products</Link></li>
+          </ul>
+      <Routes>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/" element={<PrivateRoute />}>
+          <Route path="products" element={<ProductList />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </Router>
+      </div>
+    </Provider>
     </div>
   );
 }
